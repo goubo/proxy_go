@@ -4,8 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"github.com/spf13/viper"
+	"path"
 	"path/filepath"
-	handler "proxy/hander"
+	"proxy/hander"
 	"sync"
 )
 
@@ -17,19 +18,16 @@ import (
 // 监听所有接口
 // 创建代理到指定端口
 
+var t = flag.String("t", "yaml", "配置文件格式, 支持 json|yaml, 自动读取文件后缀,无后缀需要手动指定")
 var c = flag.String("c", "./demo_proxy.yaml", "指定配置文件")
 var g = flag.Bool("g", false, "在当前目录生成示例配置文件")
 
 func main() {
+	var wg sync.WaitGroup
 	flag.Parse()
 	v := viper.New()
-	c, _ := filepath.Abs(*c)
-	var wg sync.WaitGroup
-
-	v.SetConfigFile(c)
-	v.SetConfigType("yaml")
-
 	if *g {
+		v.SetConfigFile("./demo_proxy." + *t)
 		v.Set("ProxyConfig", []handler.ProxyConfig{{
 			LocalPort:  43306,
 			RemoteIp:   "192.168.1.100",
@@ -39,9 +37,15 @@ func main() {
 		if err := v.WriteConfig(); err != nil {
 			panic(err)
 		}
-		fmt.Print("示例已生成:", c)
-
+		fmt.Print("示例已生成:./demo_proxy." + *t)
 	} else {
+		c, _ := filepath.Abs(*c)
+		v.SetConfigFile(c)
+		ext := path.Ext(c)[1:]
+		if ext == "" {
+			ext = *t
+		}
+		v.SetConfigType(ext)
 		if err := v.ReadInConfig(); err != nil {
 			panic(err)
 		}

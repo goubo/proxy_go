@@ -1,0 +1,11 @@
+{
+  "proxyconfig": [
+    {
+      "LocalPort": 43306,
+      "RemoteIp": "192.168.1.100",
+      "RemotePort": 3306,
+      "Enable": false,
+      "Network": "tcp"
+    }
+  ]
+}
