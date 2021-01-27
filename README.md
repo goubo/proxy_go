@@ -11,9 +11,9 @@ golang端口代理
 
 ```yaml
 proxyconfig:
-- localport: 43306
-  remoteip: 192.168.1.100
-  remoteport: 3306
-  enable: false
-  network: tcp
+- localport: 43306   # 本地端口
+  remoteip: 192.168.1.100  # 远端ip
+  remoteport: 3306   # 远端端口
+  enable: false   # 是否启用
+  network: tcp    # 协议类型
 ```

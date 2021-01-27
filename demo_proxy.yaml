@@ -1,0 +1,6 @@
+proxyconfig:
+- localport: 43306
+  remoteip: 192.168.1.100
+  remoteport: 3306
+  enable: false
+  network: tcp
