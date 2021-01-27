@@ -19,7 +19,7 @@ import (
 // 创建代理到指定端口
 
 var t = flag.String("t", "yaml", "配置文件格式, 支持 json|yaml, 自动读取文件后缀,无后缀需要手动指定")
-var c = flag.String("c", "./demo_proxy.yaml", "指定配置文件")
+var c = flag.String("c", "./demo_config.yaml", "指定配置文件")
 var g = flag.Bool("g", false, "在当前目录生成示例配置文件")
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		if err := v.WriteConfig(); err != nil {
 			panic(err)
 		}
-		fmt.Print("示例已生成:./demo_proxy." + *t)
+		fmt.Print("示例已生成:./demo_config." + *t)
 	} else {
 		c, _ := filepath.Abs(*c)
 		v.SetConfigFile(c)
