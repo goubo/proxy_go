@@ -58,7 +58,6 @@ func ProxyHandler(conf ProxyConfig, wg *sync.WaitGroup) {
 }
 
 func main() {
-	var wg sync.WaitGroup
 	flag.Parse()
 	v := viper.New()
 	if *g {
@@ -74,6 +73,7 @@ func main() {
 		}
 		fmt.Print("示例已生成:./demo_config." + *t)
 	} else {
+		var wg sync.WaitGroup
 		c, _ := filepath.Abs(*c)
 		v.SetConfigFile(c)
 		ext := path.Ext(c)[1:]
@@ -95,7 +95,7 @@ func main() {
 				go ProxyHandler(proxyConfig, &wg)
 			}
 		}
+		wg.Wait()
+		fmt.Println("所有进程结束")
 	}
-	wg.Wait()
-	fmt.Println("所有进程结束")
 }
