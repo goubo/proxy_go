@@ -2,6 +2,7 @@ package handler
 
 type Config struct {
 	ProxyConfig []ProxyConfig
+	JhChannel   JHChannel
 }
 
 type ProxyConfig struct {
@@ -10,4 +11,9 @@ type ProxyConfig struct {
 	RemotePort int
 	Enable     bool
 	Network    string
+}
+
+type JHChannel struct {
+	Enable bool
+	Url    string
 }

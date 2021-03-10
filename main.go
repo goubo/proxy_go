@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"proxy/handler"
 	"sync"
+	"time"
 )
 
 // 读取配置文件
@@ -19,7 +20,7 @@ import (
 // 创建代理到指定端口
 
 var t = flag.String("t", "yaml", "配置文件格式, 支持 json|yaml, 自动读取文件后缀,无后缀需要手动指定")
-var c = flag.String("c", "./demo_config.yaml", "指定配置文件")
+var c = flag.String("c", "./demo_proxy.yaml", "指定配置文件")
 var g = flag.Bool("g", false, "在当前目录生成示例配置文件")
 var p = flag.Int("p", 11104, "代理本身服务端口,api处理")
 
@@ -37,10 +38,11 @@ func main() {
 		if err := v.WriteConfig(); err != nil {
 			panic(err)
 		}
-		fmt.Print("示例已生成:./demo_config." + *t)
+		fmt.Print("示例已生成:./demo_proxy." + *t)
+		return
 	} else {
 		//本地监听 端口
-		go  handler.Route(*p)
+		go handler.Route(*p)
 		var wg sync.WaitGroup
 		c, _ := filepath.Abs(*c)
 		v.SetConfigFile(c)
@@ -58,9 +60,10 @@ func main() {
 		}
 		for _, proxyConfig := range config.ProxyConfig {
 			fmt.Println(proxyConfig)
+			<-time.After(time.Millisecond * 50)
 			wg.Add(1)
 			if proxyConfig.Enable {
-				go handler.ProxyHandler(proxyConfig, &wg)
+				go handler.ProxyHandler(&proxyConfig, &wg, &config.JhChannel)
 			}
 		}
 		wg.Wait()
