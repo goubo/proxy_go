@@ -17,3 +17,11 @@ proxyconfig:
   enable: false   # 是否启用
   network: tcp    # 协议类型
 ```
+
+```shell
+cd proxy 
+go mod init proxy
+go mod vendor
+go mod tidy
+go build
+```
