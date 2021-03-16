@@ -8,16 +8,15 @@ import (
 	"sync"
 )
 
-func ProxyHandler(conf *ProxyConfig, wg *sync.WaitGroup, channel *JHChannel) {
+func ProxyHandler(conf ProxyConfig, wg *sync.WaitGroup, channel *JHChannel) {
 
 	remoteIp, remotePort, err := getChannel(conf, channel)
 
 	if err != nil {
-		log.Fatalf("通道申请失败 %v !\n", err)
+		fmt.Printf("通道申请失败 %v !\n", err)
 	}
 	conf.RemotePort = remotePort
 	conf.RemoteIp = remoteIp
-
 	listener, err := net.Listen(conf.Network, fmt.Sprintf(":%d", conf.LocalPort))
 	if err != nil {
 		log.Fatalf("端口监听失败 %v\n", err)
@@ -39,7 +38,7 @@ func ProxyHandler(conf *ProxyConfig, wg *sync.WaitGroup, channel *JHChannel) {
 	}
 }
 
-func getChannel(conf *ProxyConfig, channel *JHChannel) (remoteIp string, remotePort int, err error) {
+func getChannel(conf ProxyConfig, channel *JHChannel) (remoteIp string, remotePort int, err error) {
 
 	if !channel.Enable {
 		return conf.RemoteIp, conf.RemotePort, nil

@@ -4,20 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"github.com/spf13/viper"
+	"log"
 	"path"
 	"path/filepath"
 	"proxy/handler"
 	"sync"
 	"time"
 )
-
-// 读取配置文件
-// 配置文件格式
-// 解析出所有的配置
-// 读取所有本地端口
-// 读取所有本地端口对应远端端口
-// 监听所有接口
-// 创建代理到指定端口
 
 var t = flag.String("t", "yaml", "配置文件格式, 支持 json|yaml, 自动读取文件后缀,无后缀需要手动指定")
 var c = flag.String("c", "./demo_proxy.yaml", "指定配置文件")
@@ -59,11 +52,11 @@ func main() {
 			panic(err)
 		}
 		for _, proxyConfig := range config.ProxyConfig {
-			fmt.Println(proxyConfig)
-			<-time.After(time.Millisecond * 50)
+			log.Println(proxyConfig)
 			wg.Add(1)
 			if proxyConfig.Enable {
-				go handler.ProxyHandler(&proxyConfig, &wg, &config.JhChannel)
+				time.Sleep(time.Millisecond * 50)
+				go handler.ProxyHandler(proxyConfig, &wg, &config.JhChannel)
 			}
 		}
 		wg.Wait()
