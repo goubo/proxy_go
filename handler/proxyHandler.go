@@ -29,15 +29,21 @@ func ProxyHandler(conf ProxyConfig, wg *sync.WaitGroup, channel *JHChannel) {
 		if err != nil {
 			log.Println("访问链接获取失败", err)
 		}
+		//go handle2(conn, conf)
 		go handle(conn, conf)
-		//dConn, err := net.Dial(conf.Network, fmt.Sprintf("%s:%d", conf.RemoteIp, conf.RemotePort))
-		//if err != nil {
-		//	log.Println("创建连接失败", err)
-		//} else {
-		//	go io.Copy(conn, dConn)
-		//	go io.Copy(dConn, conn)
-		//}
 	}
+}
+
+func handle2(localConn net.Conn, conf ProxyConfig) {
+	remoteConn, err := net.Dial(conf.Network, fmt.Sprintf("%s:%d", conf.RemoteIp, conf.RemotePort))
+	if err != nil {
+		log.Println("创建连接失败", err)
+	} else {
+		go io.Copy(localConn, remoteConn)
+		go io.Copy(remoteConn, localConn)
+	}
+	defer localConn.Close()
+	defer remoteConn.Close()
 }
 
 func handle(localConn net.Conn, conf ProxyConfig) {

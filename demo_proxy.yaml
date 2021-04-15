@@ -4,3 +4,19 @@ proxyconfig:
   remoteport: 3306
   enable: false
   network: tcp
+- localport: 11102
+  remoteip: 192.168.15.54
+  remoteport: 11102
+  enable: true
+  network: tcp
+- localport: 11103
+  remoteip: 192.168.15.54
+  remoteport: 11102
+  enable: true
+  network: tcp
+- localport: 11106
+  remoteip: 192.168.15.54
+  remoteport: 11106
+  enable: true
+  network: tcp
+
