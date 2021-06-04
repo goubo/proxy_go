@@ -1,13 +1,13 @@
 package main
 
 import (
+	"./handler"
 	"flag"
 	"fmt"
 	"github.com/spf13/viper"
 	"log"
 	"path"
 	"path/filepath"
-	"proxy/handler"
 	"sync"
 	"time"
 )
